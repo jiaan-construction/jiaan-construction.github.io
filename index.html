@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="JiaAn Gmail Bridge is a private, read-only Gmail utility for explicitly authorized accounts.">
+    <meta name="description" content="JiaAn Gmail Bridge is a private Gmail utility with isolated read-only and confirmed compose channels for explicitly authorized accounts.">
     <title>JiaAn Gmail Bridge</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
@@ -15,10 +15,10 @@
         <a href="/terms.html">Terms</a>
       </nav>
 
-      <p class="eyebrow">Private utility · Read-only access</p>
+      <p class="eyebrow">Private utility · Least-privilege Gmail access</p>
       <h1>JiaAn Gmail Bridge</h1>
       <p class="lead">
-        A private desktop utility used by its operator and a small set of explicitly authorized users to access their own Gmail data through the Gmail API.
+        A private desktop utility used by its operator and a small set of explicitly authorized users to read their own Gmail data, prepare drafts, and send only after explicit confirmation.
       </p>
 
       <div class="notice">
@@ -31,12 +31,14 @@
           <li>Verifies which Gmail account is connected.</li>
           <li>Lists and searches messages requested by an authorized user.</li>
           <li>Reads selected messages and downloads attachments only when requested.</li>
+          <li>Uses a separate authorization channel to prepare drafts and replies with attachments.</li>
+          <li>Sends an existing draft only after a fresh preview and explicit confirmation.</li>
         </ul>
 
         <h2 style="margin-top: 28px;">What the tool cannot do</h2>
         <ul>
-          <li>It cannot send, reply to, or forward email.</li>
-          <li>It cannot delete, move, label, archive, or otherwise modify email.</li>
+          <li>It cannot label, mark read, archive, move messages to trash, permanently delete messages, or change Gmail settings.</li>
+          <li>It cannot send a newly composed message without first creating and re-checking a draft.</li>
           <li>It does not use Gmail data for advertising or sale.</li>
         </ul>
       </section>
@@ -44,7 +46,7 @@
       <section>
         <h2>Data handling</h2>
         <p>
-          The app requests only <code>gmail.readonly</code>. OAuth credentials are stored on an operator-controlled local computer. Gmail data is accessed only in response to an authorized request. See the <a href="/privacy.html">Privacy Policy</a> for details.
+          The app requests <code>gmail.readonly</code> for reading and a separately stored <code>gmail.compose</code> authorization for drafts and confirmed sending. OAuth credentials are stored on an operator-controlled local computer. Gmail data is accessed or changed only in response to an authorized request. See the <a href="/privacy.html">Privacy Policy</a> for details.
         </p>
       </section>
 

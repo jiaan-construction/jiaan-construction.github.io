@@ -21,21 +21,24 @@
 
       <section>
         <h2>1. Data the app accesses</h2>
-        <p>The app uses Google's <code>gmail.readonly</code> scope. After a user grants consent, it may access:</p>
+        <p>The app uses Google's <code>gmail.readonly</code> scope for reading and a separately authorized <code>gmail.compose</code> scope for draft management and confirmed sending. After a user grants consent, it may access:</p>
         <ul>
           <li>the connected Gmail account address and mailbox statistics;</li>
           <li>message metadata, senders, subjects, dates, labels, snippets, and message content;</li>
           <li>attachment names and attachment content when an authorized user requests a download.</li>
+          <li>draft recipients, subjects, message bodies, reply-thread headers, and attachments when an authorized user asks the app to prepare or send a draft.</li>
         </ul>
 
         <h2 style="margin-top: 28px;">2. How data is used</h2>
-        <p>Google user data is used only to provide user-requested email lookup, reading, summarization, and attachment retrieval. It is not used for advertising, profiling, credit decisions, or any unrelated purpose.</p>
+        <p>Google user data is used only to provide user-requested email lookup, reading, summarization, attachment retrieval, draft creation, replies, and separately confirmed draft sending. It is not used for advertising, profiling, credit decisions, or any unrelated purpose.</p>
 
         <h2 style="margin-top: 28px;">3. Storage and retention</h2>
         <ul>
           <li>OAuth credentials are stored on an operator-controlled local computer.</li>
+          <li>Read-only and compose OAuth credentials are stored in separate local files.</li>
           <li>The app does not maintain a remote Gmail database.</li>
           <li>Attachments are saved locally only when explicitly requested and remain until the local user removes them.</li>
+          <li>A prepared draft or send request is held locally for up to 30 minutes for confirmation. It is removed after successful use or when the bridge next cleans expired requests.</li>
           <li>OAuth credentials remain until they are revoked or deleted.</li>
         </ul>
 
@@ -43,7 +46,7 @@
         <p>When an authorized user explicitly requests analysis or summarization, the requested Gmail data may be processed by the AI assistant service used by the operator solely to complete that request. Gmail data is not sold, rented, used for advertising, or shared for unrelated purposes.</p>
 
         <h2 style="margin-top: 28px;">5. Security</h2>
-        <p>The app uses Google's OAuth 2.0 flow and does not collect Google passwords. Access is limited to accounts that complete Google's consent process. The bridge itself is read-only and cannot send, delete, move, label, or modify email.</p>
+        <p>The app uses Google's OAuth 2.0 flow and does not collect Google passwords. Access is limited to accounts that complete Google's consent process. The read channel is read-only. The separate compose channel requires a short-lived confirmation for each draft creation and a second confirmation before sending. The implementation does not provide label, archive, trash, permanent-delete, mailbox-import, or settings operations.</p>
 
         <h2 style="margin-top: 28px;">6. User control</h2>
         <p>Users may revoke access at any time from their <a href="https://myaccount.google.com/connections" rel="noreferrer">Google Account connections</a>. They may also request deletion of locally stored OAuth credentials or downloaded files by contacting the operator.</p>
