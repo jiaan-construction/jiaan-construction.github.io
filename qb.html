@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="JiaAn QuickBooks Bridge is a private read-first utility that lets its operator query their own QuickBooks Online company data from a local computer.">
+    <title>JiaAn QuickBooks Bridge</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main>
+      <nav aria-label="Policy navigation">
+        <a href="/">Home</a>
+        <a href="/qb.html">QuickBooks Bridge</a>
+        <a href="/qb-privacy.html">Privacy</a>
+        <a href="/qb-terms.html">Terms</a>
+      </nav>
+
+      <p class="eyebrow">Private utility · Read-first QuickBooks Online access</p>
+      <h1>JiaAn QuickBooks Bridge</h1>
+      <p class="lead">
+        A private command-line utility used by JIA AN Construction Pte. Ltd. to read its own QuickBooks Online accounting data from an operator-controlled computer.
+      </p>
+
+      <div class="notice">
+        <strong>Limited purpose.</strong> This tool is not offered as a public or multi-tenant service. It connects to a single QuickBooks Online company, and only after that company's own administrator completes Intuit's OAuth consent flow.
+      </div>
+
+      <section>
+        <h2>What the tool does</h2>
+        <ul>
+          <li>Confirms which QuickBooks Online company is connected.</li>
+          <li>Runs standard reports — profit and loss, balance sheet, aged receivables, customer income — for a date range chosen by the operator.</li>
+          <li>Lists customers and invoices, and runs read-only queries requested by the operator.</li>
+          <li>Creates a customer record only when the operator passes an explicit confirmation flag; without it the command prints the intended record and writes nothing.</li>
+        </ul>
+
+        <h2 style="margin-top: 28px;">What the tool cannot do</h2>
+        <ul>
+          <li>It cannot move money, record or alter payments, or submit any tax filing.</li>
+          <li>It cannot delete accounts, customers, invoices, or transactions.</li>
+          <li>It cannot change company settings, the chart of accounts, or existing journal entries.</li>
+          <li>It does not connect to any company other than the one whose administrator authorized it.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Data handling</h2>
+        <p>
+          The app requests the <code>com.intuit.quickbooks.accounting</code> scope. OAuth credentials and the refresh token are stored in a permission-restricted file on an operator-controlled local computer. There is no server component and no remote copy of the accounting data. Company data is retrieved only in response to an operator command. See the <a href="/qb-privacy.html">Privacy Policy</a> for details.
+        </p>
+      </section>
+
+      <section>
+        <h2>Connecting and disconnecting</h2>
+        <p>
+          To connect, the operator runs the local authorization command and completes Intuit's consent screen — see <a href="/qb-connect.html">connect</a>. To disconnect, revoke the app from the QuickBooks Online company's connected-apps settings and delete the local token file — see <a href="/qb-disconnect.html">disconnect</a>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>Questions about access or privacy: <a href="mailto:keepmind9697@gmail.com">keepmind9697@gmail.com</a></p>
+      </section>
+
+      <footer>
+        <span>JiaAn QuickBooks Bridge</span>
+        <a href="/qb-privacy.html">Privacy Policy</a>
+        <a href="/qb-terms.html">Terms of Service</a>
+      </footer>
+    </main>
+  </body>
+</html>
