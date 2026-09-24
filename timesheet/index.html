@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>JIA AN 工时台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#EEF0EC; --surface:#FFFFFF; --sunk:#F5F6F3; --line:#D5D9D2; --line-soft:#E4E7E1;
+  --ink:#1B2220; --ink-2:#4A5450; --ink-3:#7A847F;
+  --steel:#2C5A78; --steel-ink:#FFFFFF; --steel-soft:#E3ECF2;
+  --jib:#E3A600; --jib-soft:#FFF4D1; --jib-ink:#3A2C00;
+  --ok:#2E7D4F; --ok-soft:#E1F1E7; --ev:#2C5A78; --ev-soft:#E3ECF2;
+  --bad:#B23A2E; --bad-soft:#F8E3E0; --rec:#5E6763; --rec-soft:#E9ECE8;
+  --shadow:0 1px 0 rgba(20,30,25,.04),0 2px 8px rgba(20,30,25,.06);
+  --f-sans:"IBM Plex Sans",-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  --f-disp:"Barlow Condensed","IBM Plex Sans","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#121614; --surface:#1A201D; --sunk:#161B19; --line:#2E3733; --line-soft:#252D29;
+    --ink:#E4E8E3; --ink-2:#AEB7B2; --ink-3:#7E8883;
+    --steel:#6FA3C8; --steel-ink:#0E1A22; --steel-soft:#1C2B36;
+    --jib:#F2BC2A; --jib-soft:#3A3013; --jib-ink:#FFE9A8;
+    --ok:#6CC08F; --ok-soft:#18301F; --ev:#7FB2D6; --ev-soft:#1C2B36;
+    --bad:#EE8577; --bad-soft:#3A1E1A; --rec:#A5AEA9; --rec-soft:#242B28;
+    --shadow:0 1px 0 rgba(0,0,0,.3),0 2px 10px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#121614; --surface:#1A201D; --sunk:#161B19; --line:#2E3733; --line-soft:#252D29;
+  --ink:#E4E8E3; --ink-2:#AEB7B2; --ink-3:#7E8883;
+  --steel:#6FA3C8; --steel-ink:#0E1A22; --steel-soft:#1C2B36;
+  --jib:#F2BC2A; --jib-soft:#3A3013; --jib-ink:#FFE9A8;
+  --ok:#6CC08F; --ok-soft:#18301F; --ev:#7FB2D6; --ev-soft:#1C2B36;
+  --bad:#EE8577; --bad-soft:#3A1E1A; --rec:#A5AEA9; --rec-soft:#242B28;
+  --shadow:0 1px 0 rgba(0,0,0,.3),0 2px 10px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font-family:var(--f-sans);font-size:14px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1180px;margin:0 auto}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--jib);outline-offset:2px}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);padding-block:14px 0;margin-inline:-16px;padding-inline:16px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-disp);font-weight:700;font-size:28px;letter-spacing:.02em;margin:0;line-height:1}
+.brand h1 b{display:inline-block;background:var(--jib);color:#1B1600;padding:0 6px;margin-right:6px;transform:skewX(-8deg)}
+.brand .sub{color:var(--ink-3);font-size:12.5px}
+.brand .who{margin-left:auto;font-size:12.5px;color:var(--ink-2);display:flex;gap:8px;align-items:center}
+.tabs{display:flex;gap:4px;margin-top:12px;overflow-x:auto}
+.tab{appearance:none;border:0;background:none;padding:8px 14px 10px;font-weight:600;color:var(--ink-3);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--jib)}
+.tab .count{font-family:var(--f-mono);font-size:11px;background:var(--rec-soft);color:var(--ink-2);padding:1px 6px;border-radius:9px;margin-left:6px}
+
+/* controls */
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-block:16px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field>span{font-size:11.5px;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+select,input[type=date],input[type=month],input[type=time],input[type=number],input[type=text],input[type=search]{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:7px 9px;min-height:36px;max-width:100%}
+select:disabled,input:disabled{opacity:.6}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 12px;min-height:36px;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--steel);border-color:var(--steel);color:var(--steel-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.btn.danger{color:var(--bad);border-color:var(--bad)}
+.btn.ghost{background:none;border-color:transparent;color:var(--ink-2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:28px;padding:3px 9px;font-size:12.5px}
+.spacer{flex:1}
+
+/* notices */
+.note{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:12px 14px;color:var(--ink-2)}
+.note.warn{border-color:var(--jib);background:var(--jib-soft);color:var(--jib-ink)}
+.note.err{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:8px;box-shadow:var(--shadow);z-index:50;max-width:calc(100% - 32px);font-size:13.5px}
+
+/* status pills */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st-R{background:var(--rec-soft);color:var(--rec)}
+.st-E{background:var(--ev-soft);color:var(--ev)}
+.st-V{background:var(--ok-soft);color:var(--ok)}
+.st-X{background:var(--bad-soft);color:var(--bad)}
+.st-new{background:var(--jib-soft);color:var(--jib-ink)}
+
+/* entry grid */
+.proj-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-block:4px 12px}
+.proj-head h2{font-family:var(--f-disp);font-size:24px;margin:0;font-weight:700;letter-spacing:.01em}
+.proj-head .meta{color:var(--ink-3);font-size:12.5px}
+.cranes{display:grid;gap:12px}
+.crane{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.crane-h{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line-soft);background:var(--sunk)}
+.tc{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1;min-width:52px}
+.crane-h .lab{color:var(--ink-2);font-size:12.5px;overflow-wrap:anywhere}
+.crane-h .req{margin-left:auto;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.slot{display:grid;grid-template-columns:78px minmax(160px,1.5fr) 124px 124px 92px 64px minmax(110px,1fr) auto;gap:8px;align-items:center;padding:8px 14px;border-top:1px solid var(--line-soft)}
+.slot:first-of-type{border-top:0}
+.slot .sh{font-weight:600;font-size:13px}
+.slot .sh small{display:block;color:var(--ink-3);font-weight:400;font-size:11px}
+.slot .hrs{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:500;text-align:right}
+.slot.dirty{background:var(--jib-soft)}
+.ltw{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;line-height:1.15;white-space:nowrap}
+.ltw small,.slot .hrs small{display:block;color:var(--ink-3);font-size:10.5px;font-weight:400}
+.ltw input{width:auto;margin:0}
+.slot.empty{grid-template-columns:78px minmax(160px,1.5fr) 1fr}
+.slot.empty .hint{color:var(--ink-3);font-size:12px}
+.slot.locked input,.slot.locked select{pointer-events:none;opacity:.75}
+.slot .end{display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.slot input,.slot select{width:100%}
+.slot-add{padding:8px 14px;border-top:1px dashed var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.lbl-m{display:none}
+.savebar{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));margin-top:16px;display:flex;gap:10px;align-items:center;background:var(--ink);color:var(--ground);padding:10px 14px;border-radius:10px;box-shadow:var(--shadow)}
+.savebar .btn{border-color:transparent}
+@media (max-width:860px){
+  .slot{grid-template-columns:1fr 1fr;gap:6px 10px;padding:12px 14px}
+  .slot .sh{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}
+  .slot .sh small{display:inline}
+  .slot .w{grid-column:1/-1}
+  .slot.empty{grid-template-columns:1fr}
+  .slot.empty .hint{display:none}
+  .slot .note-in{grid-column:1/-1}
+  .slot .end{grid-column:1/-1;justify-content:space-between}
+  .slot .hrs{text-align:left}
+  .lbl-m{display:block;font-size:11px;color:var(--ink-3)}
+}
+
+/* tables */
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:middle;white-space:nowrap}
+th{font-size:11.5px;letter-spacing:.05em;color:var(--ink-3);font-weight:600;background:var(--sunk);position:sticky;top:0;text-transform:uppercase}
+td.r,th.r{text-align:right}
+tbody tr:hover{background:var(--sunk)}
+tr.sel{background:var(--steel-soft)!important}
+tfoot td{font-weight:600;background:var(--sunk)}
+.ev{display:flex;gap:4px}
+.ev a{display:block;width:34px;height:34px;border-radius:4px;overflow:hidden;border:1px solid var(--line);background:var(--sunk);font-size:10px;color:var(--ink-2);text-align:center;line-height:32px;text-decoration:none}
+.ev img{width:100%;height:100%;object-fit:cover}
+.why{color:var(--bad);font-size:12px;white-space:normal;max-width:220px}
+.muted{color:var(--ink-3)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-block:10px}
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-block:4px 14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-width:120px}
+.stat b{display:block;font-family:var(--f-mono);font-size:20px;font-weight:500}
+.stat span{font-size:11.5px;color:var(--ink-3)}
+.grid-days td,.grid-days th{padding:6px 6px;text-align:center;font-size:12px}
+.grid-days td:first-child,.grid-days th:first-child{text-align:left;position:sticky;left:0;background:var(--surface);z-index:1}
+.grid-days th:first-child{background:var(--sunk)}
+.d-N{color:var(--steel);font-weight:600}
+.d-unv{text-decoration:underline dotted var(--jib);text-underline-offset:3px}
+.d-we{background:var(--sunk)}
+.claim{background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.claim-h{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;padding:12px 14px;background:var(--sunk);border-bottom:1px solid var(--line-soft)}
+.claim-total{text-align:right}
+.claim-total span{display:block;font-size:11px;color:var(--ink-3);letter-spacing:.05em}
+.claim-total b{font-family:var(--f-mono);font-size:22px;font-weight:500}
+.claim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px 28px;padding:12px 14px}
+.claim-grid dl{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin:0;align-items:center}
+.claim-grid dt{color:var(--ink-2);font-size:13px;white-space:nowrap}
+.claim-grid dd{margin:0;text-align:right}
+.claim-grid .tot{font-weight:600;color:var(--ink);border-top:1px solid var(--line);padding-top:6px}
+.claim-grid input[type=date]{width:140px;min-height:30px;padding:3px 6px}
+.claim-grid input[type=number]{min-height:30px;padding:3px 6px;text-align:right}
+.claim details{border-top:1px solid var(--line-soft)}
+.claim summary{padding:10px 14px;cursor:pointer;color:var(--steel);font-weight:500}
+.tag{font-size:11px;padding:1px 6px;border-radius:4px;background:var(--steel-soft);color:var(--steel);white-space:nowrap}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+h3{font-family:var(--f-disp);font-size:20px;font-weight:700;margin:22px 0 8px;letter-spacing:.01em}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink-3);margin-block:6px}
+.inline-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.inline-form input[type=text]{min-width:220px;flex:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+html{color-scheme:light}
+body{margin:0;padding-top:env(safe-area-inset-top,0px)}
+img{max-width:100%}
+
+.connect{max-width:640px;margin:24px auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);display:grid;gap:14px}
+.connect h2{font-family:var(--f-disp);font-size:26px;margin:0}
+.connect p{margin:0;color:var(--ink-2)}
+.connect input{width:100%}
+.chk{display:flex;gap:8px;align-items:center;font-size:13px}
+.chk input{width:auto}
+.howto{border-top:1px solid var(--line-soft);padding-top:10px}
+.howto summary{cursor:pointer;color:var(--steel);font-weight:500}
+.howto li{margin-block:4px}
+code{font-family:var(--f-mono);background:var(--sunk);padding:1px 5px;border-radius:4px;font-size:12.5px}
+a{color:var(--steel)}
+.st-S{background:var(--jib-soft);color:var(--jib-ink)}
+.src{font-size:10.5px;color:var(--ink-3);margin-left:4px}
+.tabs{align-items:center}
+.busy{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:16px;z-index:60;background:var(--ink);color:var(--ground);font-size:12px;padding:4px 10px;border-radius:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1><b>JIA AN</b>工时台</h1>
+      <span class="sub">录入 → 附工卡 → 核验 · 可认证工时才进 Claim</span>
+      <span class="who"><span id="who"></span><button class="btn sm" id="btn-refresh" title="从 Airtable 重新读取">↻ 刷新</button><button class="btn sm" id="btn-settings">设置</button></span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-entry" aria-selected="true" data-tab="entry">按天录入</button>
+      <button class="tab" role="tab" id="tab-check" aria-selected="false" data-tab="check">核验工卡<span class="count" id="cnt-check">0</span></button>
+      <button class="tab" role="tab" id="tab-sum" aria-selected="false" data-tab="sum">Claim 计算</button>
+      <span class="spacer"></span><button class="btn sm ghost" id="btn-form" hidden>复制工人表单链接</button>
+    </nav>
+  </header>
+
+  <div id="boot" class="note" style="margin-top:16px">正在连接 Airtable…</div>
+
+  <!-- CONNECT / SETTINGS -->
+  <section id="v-connect" hidden>
+    <div class="connect">
+      <h2>连接 Airtable</h2>
+      <p>工时台直接读写你的 Airtable（03 Operations、04 Workforce、02 Commercial）。第一次在这台设备上使用，需要贴一个 <b>Airtable 个人访问令牌</b>。令牌只存在这台设备的浏览器里，不会上传到 GitHub 或任何其他地方。</p>
+      <label class="field"><span>访问令牌（pat 开头）</span><input type="password" id="set-token" autocomplete="off" placeholder="patXXXXXXXX.XXXXXXXX"></label>
+      <label class="field"><span>核验人名字（写进 Verified By）</span><input type="text" id="set-name" placeholder="例如 David"></label>
+      <label class="field"><span>工人填报表单链接（可选，Airtable 表单的分享链接）</span><input type="text" id="set-form" placeholder="https://airtable.com/app.../pag.../form"></label>
+      <label class="chk"><input type="checkbox" id="set-remember" checked> 在这台设备上记住令牌（公共电脑请取消）</label>
+      <div class="actions"><button class="btn primary" id="set-save">保存并连接</button><button class="btn ghost" id="set-cancel" hidden>取消</button><span class="spacer"></span><button class="btn danger" id="set-clear" hidden>清除这台设备上的令牌</button></div>
+      <div id="set-msg"></div>
+      <details class="howto"><summary>怎么生成访问令牌（2 分钟）</summary>
+        <ol>
+          <li>打开 <a href="https://airtable.com/create/tokens" target="_blank" rel="noopener">airtable.com/create/tokens</a> → <b>Create token</b>，名字写「JIA AN 工时台」。</li>
+          <li><b>Scopes</b> 加三项：<code>data.records:read</code>、<code>data.records:write</code>、<code>schema.bases:read</code>。</li>
+          <li><b>Access</b> 只加三个 base：<b>02｜Commercial &amp; Clients</b>、<b>03｜Operations &amp; Projects</b>、<b>04｜Workforce &amp; HR</b>。不要选 All workspaces。</li>
+          <li>点 Create，复制 pat 开头的那串，贴到上面。</li>
+        </ol>
+        <p class="muted">写权限只作用于 03 Operations 的两张工时表；02 和 04 只读。令牌丢了或换电脑，回到这里重新生成即可。</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ENTRY -->
+  <section id="v-entry" hidden>
+    <div class="bar">
+      <label class="field"><span>工地</span><select id="e-proj"></select></label>
+      <label class="field"><span>日期（上班那天）</span><input type="date" id="e-date"></label>
+      <div class="field"><span>&nbsp;</span><div style="display:flex;gap:6px">
+        <button class="btn" id="e-prev" aria-label="前一天">‹ 前一天</button>
+        <button class="btn" id="e-next" aria-label="后一天">后一天 ›</button>
+      </div></div>
+      <div class="field"><span>&nbsp;</span><button class="btn" id="e-copy">照抄前一天</button></div>
+      <label class="field" style="flex-direction:row;align-items:center;gap:6px;align-self:center;margin-top:18px"><input type="checkbox" id="e-all"> <span style="text-transform:none;letter-spacing:0;font-size:12.5px">显示非 Active 工地</span></label>
+    </div>
+    <div id="e-body"></div>
+  </section>
+
+  <!-- CHECK -->
+  <section id="v-check" hidden>
+    <div class="bar">
+      <label class="field"><span>月份</span><input type="month" id="c-month"></label>
+      <label class="field"><span>工地</span><select id="c-proj"></select></label>
+      <label class="field"><span>状态</span><select id="c-status">
+        <option value="open">待处理（未核验）</option>
+        <option value="S">工人提交 · 待处理</option>
+        <option value="R">已录入 · 无工卡</option>
+        <option value="E">有工卡 · 待核验</option>
+        <option value="V">已核验</option>
+        <option value="X">已退回</option>
+        <option value="all">全部</option>
+      </select></label>
+      <label class="field"><span>司机</span><input type="search" id="c-worker" placeholder="名字或 UID"></label>
+    </div>
+    <div class="actions" id="c-actions">
+      <span id="c-selinfo" class="muted">勾选记录后可批量操作</span>
+      <span class="spacer"></span>
+      <label class="btn" id="c-upl-l"><input type="file" id="c-upl" accept="image/*,application/pdf" multiple hidden>附工卡到所选</label>
+      <button class="btn ok" id="c-verify">标记已核验</button>
+      <button class="btn danger" id="c-reject">退回…</button>
+      <button class="btn ghost" id="c-reopen">撤回为已录入</button>
+    </div>
+    <div class="inline-form" id="c-rejbox" hidden style="margin-bottom:10px">
+      <input type="text" id="c-rejwhy" placeholder="退回原因，如：工卡上是 10h，不是 12h">
+      <button class="btn danger" id="c-rejgo">确认退回</button>
+      <button class="btn ghost" id="c-rejcancel">取消</button>
+    </div>
+    <div id="c-body"></div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section id="v-sum" hidden>
+    <div class="bar">
+      <label class="field"><span>工地</span><select id="s-proj"></select></label>
+      <label class="field"><span>Claim 周期结束月</span><input type="month" id="s-month"></label>
+      <div class="field"><span>周期</span><div id="s-period" class="mono" style="padding-top:7px"></div></div>
+      <label class="field" style="flex-direction:row;align-items:center;gap:6px;align-self:center;margin-top:18px"><input type="checkbox" id="s-onlyv" checked> <span style="text-transform:none;letter-spacing:0;font-size:12.5px">只算已核验</span></label>
+      <span class="spacer"></span>
+      <div class="field"><span>&nbsp;</span><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn primary" id="s-csv">导出 Claim 汇总</button><button class="btn" id="s-csv2">导出逐日明细</button></div></div>
+    </div>
+    <div id="s-body"></div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+<div class="busy" id="busy" hidden>同步中…</div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
