@@ -1,81 +1,166 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="JiaAn Gmail Bridge is a private Gmail utility with isolated read-only and confirmed compose channels for explicitly authorized accounts.">
-    <title>JiaAn Gmail Bridge</title>
-    <link rel="stylesheet" href="/styles.css">
-  </head>
-  <body>
-    <main>
-      <nav aria-label="Policy navigation">
-        <a href="/">Home</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/terms.html">Terms</a>
-      </nav>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JIA AN Construction Pte. Ltd.</title>
+<meta name="description" content="JIA AN Construction — tower crane operators for Singapore construction sites. Company profile, worksite navigation and crew tools. Also home of JiaAn Gmail Bridge, a private Gmail utility.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- 与 company-profile 同一套视觉：深海军蓝信头、Source Serif 标题、Inter 正文 -->
+<style>
+:root{
+  --navy:#12305B; --navy-l:#2C4E7E;
+  --ink:#16202E; --ink-2:#4A5769; --ink-3:#78859A;
+  --ground:#FFFFFF; --ground-2:#F4F6F9; --rule:#DCE2EA;
+  --serif:"Source Serif 4",Georgia,"Songti SC",serif;
+  --sans:Inter,-apple-system,"PingFang SC","Hiragino Sans GB",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#9FC0EA; --navy-l:#6F93C2; --ink:#E6EAF0; --ink-2:#AEB8C6; --ink-3:#7D8898;
+    --ground:#0E1622; --ground-2:#152033; --rule:#243247;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#9FC0EA; --navy-l:#6F93C2; --ink:#E6EAF0; --ink-2:#AEB8C6; --ink-3:#7D8898;
+  --ground:#0E1622; --ground-2:#152033; --rule:#243247;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 16px/1.65 var(--sans);overflow-x:hidden}
+a{color:var(--navy);text-underline-offset:2px}
+.in{max-width:860px;margin:0 auto}
 
-      <div class="notice">
-        <strong>Looking for JIA AN Construction?</strong>
-        <a href="/company-profile/">Company profile</a> ·
-        <a href="/site-nav/">Worksite navigation 工地导航</a> ·
-        <a href="/safety/">Safety 安全须知</a> ·
-        <a href="/worker-intake/">Worker intake 入职</a> ·
-        <a href="/handbook/">Handbook 员工手册</a>
-      </div>
+.head{background:#0B1F3D;color:#fff;padding:52px 24px 42px}
+.head h1{font:600 clamp(26px,5vw,40px)/1.15 var(--serif);margin:0 0 10px;letter-spacing:.01em;text-wrap:balance}
+.head .tag{font-size:clamp(15px,2.4vw,18px);color:#C6D4E8;margin:0 0 4px}
+.head .tag-zh{font-size:15px;color:#8FA6C4;margin:0 0 20px}
+.head .meta{font-size:13px;color:#8FA6C4;letter-spacing:.04em;border-top:1px solid rgba(255,255,255,.16);padding-top:16px;margin:0}
+.rule{height:4px;background:linear-gradient(90deg,#12305B 0 62%,#2C4E7E 62%)}
 
-      <p class="eyebrow">Private utility · Least-privilege Gmail access</p>
-      <h1>JiaAn Gmail Bridge</h1>
-      <p class="lead">
-        A private desktop utility used by its operator and a small set of explicitly authorized users to read their own Gmail data, prepare drafts, and send only after explicit confirmation.
-      </p>
+main{padding:8px 24px 64px}
+h2{font:600 clamp(20px,3.4vw,24px)/1.3 var(--serif);color:var(--navy);margin:44px 0 6px}
+.lede{color:var(--ink-2);margin:0 0 18px;max-width:62ch}
 
-      <div class="notice">
-        <strong>Limited purpose.</strong> This tool is not offered as a public email service. Every account must complete Google's OAuth consent flow before access is possible.
-      </div>
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.card{display:flex;flex-direction:column;gap:4px;padding:18px 18px 16px;border:1px solid var(--rule);
+  border-radius:6px;background:var(--ground);text-decoration:none;color:inherit;
+  transition:border-color .15s, background .15s}
+.card:hover{border-color:var(--navy-l);background:var(--ground-2)}
+.card:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+.card b{font:600 16px/1.35 var(--sans);color:var(--ink)}
+.card b::after{content:" →";color:var(--navy-l)}
+.card .zh{font-size:14px;color:var(--ink-2)}
+.card .d{font-size:13.5px;color:var(--ink-3);margin-top:4px}
 
-      <section>
-        <h2>What the tool does</h2>
-        <ul>
-          <li>Verifies which Gmail account is connected.</li>
-          <li>Lists and searches messages requested by an authorized user.</li>
-          <li>Reads selected messages and downloads attachments only when requested.</li>
-          <li>Uses a separate authorization channel to prepare drafts and replies with attachments.</li>
-          <li>Sends an existing draft only after a fresh preview and explicit confirmation.</li>
-        </ul>
+.util{margin-top:52px;padding:24px;background:var(--ground-2);border:1px solid var(--rule);border-radius:6px}
+.util h2{margin-top:0;font-size:20px}
+.util h3{font:600 15px/1.4 var(--sans);margin:22px 0 6px;color:var(--ink)}
+.util p,.util ul{font-size:14.5px;color:var(--ink-2);max-width:66ch;margin:0 0 10px}
+.util ul{padding-left:20px}
+.util li{margin-bottom:4px}
+.util code{background:var(--ground);border:1px solid var(--rule);border-radius:4px;padding:1px 5px;font-size:.88em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.util .links{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;margin-top:14px}
 
-        <h2 style="margin-top: 28px;">What the tool cannot do</h2>
-        <ul>
-          <li>It cannot label, mark read, archive, move messages to trash, permanently delete messages, or change Gmail settings.</li>
-          <li>It cannot send a newly composed message without first creating and re-checking a draft.</li>
-          <li>It does not use Gmail data for advertising or sale.</li>
-        </ul>
-      </section>
+footer{background:#0B1F3D;color:#C6D4E8;padding:36px 24px;font-size:14.5px}
+footer b{color:#fff;font-size:16px}
+footer a{color:#9FC0EA}
+footer .fine{margin-top:18px;padding-top:14px;font-size:12.5px;color:#7B90AE;border-top:1px solid rgba(255,255,255,.14)}
+</style>
+</head>
+<body>
 
-      <section>
-        <h2>Data handling</h2>
-        <p>
-          The app requests <code>gmail.readonly</code> for reading and a separately stored <code>gmail.compose</code> authorization for drafts and confirmed sending. OAuth credentials are stored on an operator-controlled local computer. Gmail data is accessed or changed only in response to an authorized request. See the <a href="/privacy.html">Privacy Policy</a> for details.
-        </p>
-      </section>
+<header class="head"><div class="in">
+  <h1>JIA AN CONSTRUCTION PTE. LTD.</h1>
+  <p class="tag">Tower crane operators for Singapore construction sites</p>
+  <p class="tag-zh">新加坡塔吊司机供应</p>
+  <p class="meta">UEN 202204260G　·　Since 2022　·　bizSAFE Level 3　·　BCA CR01　·　SLOTS CS08</p>
+</div></header>
+<div class="rule"></div>
 
-      <section>
-        <h2>Other tools</h2>
-        <p>
-          <a href="/qb.html">JiaAn QuickBooks Bridge</a> — a separate private utility that reads this company's own QuickBooks Online data. It has its own <a href="/qb-privacy.html">privacy policy</a> and <a href="/qb-terms.html">terms</a>.
-        </p>
-      </section>
+<main><div class="in">
 
-      <section>
-        <h2>Contact</h2>
-        <p>Questions about access or privacy: <a href="mailto:keepmind9697@gmail.com">keepmind9697@gmail.com</a></p>
-      </section>
+  <h2>For main contractors</h2>
+  <p class="lede">Company profile, project track record, and registrations &amp; insurance — in English and Chinese.</p>
+  <div class="grid">
+    <a class="card" href="/company-profile/">
+      <b>Company profile</b><span class="zh">公司介绍</span>
+      <span class="d">24 project sites since 2022 · certifications · contact</span>
+    </a>
+  </div>
 
-      <footer>
-        <span>JiaAn Gmail Bridge</span>
-        <a href="/privacy.html">Privacy Policy</a>
-        <a href="/terms.html">Terms of Service</a>
-      </footer>
-    </main>
-  </body>
+  <h2>For our crew</h2>
+  <p class="lede">For JIA AN operators and new joiners. 给佳安司机和新同事用。</p>
+  <div class="grid">
+    <a class="card" href="/site-nav/">
+      <b>Worksite navigation</b><span class="zh">工地导航</span>
+      <span class="d">Find your site, start navigation, copy coordinates</span>
+    </a>
+    <a class="card" href="/safety/">
+      <b>Safety acknowledgement</b><span class="zh">安全须知</span>
+      <span class="d">Read and sign before you go up</span>
+    </a>
+    <a class="card" href="/worker-intake/">
+      <b>Worker intake</b><span class="zh">入职资料</span>
+      <span class="d">Submit your particulars and documents</span>
+    </a>
+    <a class="card" href="/handbook/">
+      <b>Employee handbook</b><span class="zh">员工手册</span>
+      <span class="d">How the company works</span>
+    </a>
+  </div>
+
+  <section class="util" id="gmail-bridge" aria-labelledby="gb">
+    <h2 id="gb">JiaAn Gmail Bridge</h2>
+    <p>
+      A private desktop utility used by its operator and a small set of explicitly authorized users to read their own Gmail data, prepare drafts, and send only after explicit confirmation.
+    </p>
+    <p><strong>Limited purpose.</strong> This tool is not offered as a public email service. Every account must complete Google's OAuth consent flow before access is possible.</p>
+
+    <h3>What the tool does</h3>
+    <ul>
+      <li>Verifies which Gmail account is connected.</li>
+      <li>Lists and searches messages requested by an authorized user.</li>
+      <li>Reads selected messages and downloads attachments only when requested.</li>
+      <li>Uses a separate authorization channel to prepare drafts and replies with attachments.</li>
+      <li>Sends an existing draft only after a fresh preview and explicit confirmation.</li>
+    </ul>
+
+    <h3>What the tool cannot do</h3>
+    <ul>
+      <li>It cannot label, mark read, archive, move messages to trash, permanently delete messages, or change Gmail settings.</li>
+      <li>It cannot send a newly composed message without first creating and re-checking a draft.</li>
+      <li>It does not use Gmail data for advertising or sale.</li>
+    </ul>
+
+    <h3>Data handling</h3>
+    <p>
+      The app requests <code>gmail.readonly</code> for reading and a separately stored <code>gmail.compose</code> authorization for drafts and confirmed sending. OAuth credentials are stored on an operator-controlled local computer. Gmail data is accessed or changed only in response to an authorized request. See the <a href="/privacy.html">Privacy Policy</a> for details.
+    </p>
+
+    <h3>Other tools</h3>
+    <p>
+      <a href="/qb.html">JiaAn QuickBooks Bridge</a> — a separate private utility that reads this company's own QuickBooks Online data. It has its own <a href="/qb-privacy.html">privacy policy</a> and <a href="/qb-terms.html">terms</a>.
+    </p>
+
+    <div class="links">
+      <a href="/privacy.html">Gmail Bridge Privacy Policy</a>
+      <a href="/terms.html">Gmail Bridge Terms of Service</a>
+      <a href="mailto:keepmind9697@gmail.com">Access &amp; privacy questions: keepmind9697@gmail.com</a>
+    </div>
+  </section>
+
+</div></main>
+
+<footer><div class="in">
+  <b>Mr. Jason Lan</b><br>
+  +65 8546 1360 · <a href="mailto:jiaanjason1360@gmail.com">jiaanjason1360@gmail.com</a><br>
+  1 North Bridge Road, #06-17 High Street Centre, Singapore 179094
+  <div class="fine">© JIA AN CONSTRUCTION PTE. LTD. · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></div>
+</div></footer>
+
+</body>
 </html>
