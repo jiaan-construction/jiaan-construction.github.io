@@ -216,7 +216,7 @@ a{color:var(--steel)}
       <button class="tab" role="tab" id="tab-entry" aria-selected="true" data-tab="entry">按天录入</button>
       <button class="tab" role="tab" id="tab-check" aria-selected="false" data-tab="check">核验工卡<span class="count" id="cnt-check">0</span></button>
       <button class="tab" role="tab" id="tab-sum" aria-selected="false" data-tab="sum">Claim 计算</button>
-      <span class="spacer"></span><button class="btn sm ghost" id="btn-form" hidden>复制工人填工时网址</button>
+      <span class="spacer"></span><button class="btn sm ghost" id="btn-form" hidden>复制每日录入网址</button>
     </nav>
   </header>
 
@@ -266,7 +266,7 @@ a{color:var(--steel)}
       <label class="field"><span>工地</span><select id="c-proj"></select></label>
       <label class="field"><span>状态</span><select id="c-status">
         <option value="open">待处理（未核验）</option>
-        <option value="S">工人提交 · 待处理</option>
+        <option value="S">现场申报 · 待核验</option>
         <option value="R">已录入 · 无工卡</option>
         <option value="E">有工卡 · 待核验</option>
         <option value="V">已核验</option>
