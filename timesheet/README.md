@@ -2,7 +2,9 @@
 
 **网址：https://jiaan-construction.github.io/timesheet/**（办公室和班组长用，不要发给工人）
 
-**工人填工时网址：https://jiaan-construction.github.io/timesheet/form/**（固定不变，发到 WhatsApp 群；会自动跳到 Airtable 表单并标记 Source = Worker Form）。表单链接写在 `config.js` 的 `workerForm`。
+**主管每日录入网址：https://jiaan-construction.github.io/timesheet/form/**（固定不变；会自动跳到 Airtable 表单，并隐藏带入 Source = Supervisor Form、Status = Submitted）。表单链接写在 `config.js` 的 `workerForm`。工人不碰 Airtable。
+
+流程分四层，互不替代：**排班计划**（备忘录）→ **现场申报**（主管每日录入，Submitted）→ **凭证核验**（办公室对照工卡 / 总包签字单，Verified）→ **财务 / Claim**（只用 Verified）。
 
 塔吊司机工时的录入、核验和 Claim 计算。数据全部在 Airtable，这个页面本身不存任何数据。
 
@@ -19,7 +21,7 @@
 
 ## 流程
 
-1. **按天录入**：选工地、日期，按塔吊填司机和上下班时间；可「照抄前一天」。工人用 Airtable 表单提交的记录会以黄色「工人提交」出现在对应格子里。
+1. **按天录入**：选工地、日期，按塔吊填司机和上下班时间；可「照抄前一天」。主管用每日录入表交的「现场申报」会以黄色出现在对应格子里，要到「核验工卡」里核实后才进 Claim。
 2. **核验工卡**：勾选记录 → 附工卡（照片/PDF，≤5MB）→ 标记已核验。没有工卡不能核验。
 3. **Claim 计算**：按《总包 Claim 计算表》V2 口径逐人逐 TC 计算，只算已核验工时；可导出 CSV。
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>JIA AN 填工时 · Timesheet</title>
+<title>JIA AN 每日工时录入</title>
 <style>
   :root{--bg:#EEF0EC;--card:#fff;--ink:#1B2220;--ink2:#4A5450;--jib:#E3A600;--steel:#2C5A78}
   @media (prefers-color-scheme:dark){:root{--bg:#121614;--card:#1A201D;--ink:#E4E8E3;--ink2:#AEB7B2;--steel:#6FA3C8}}
@@ -19,9 +19,9 @@
 </head>
 <body>
 <main>
-  <h1><b>JIA AN</b>填工时</h1>
-  <p id="msg">正在打开表单… Opening the timesheet form…</p>
-  <a class="go" id="go" href="#" hidden>点这里填工时 · Tap to fill in</a>
+  <h1><b>JIA AN</b>每日工时录入</h1>
+  <p id="msg">正在打开录入表… Opening the daily form…</p>
+  <a class="go" id="go" href="#" hidden>点这里开始录入 · Tap to open</a>
 </main>
 <script src="../config.js"></script>
 <script>
@@ -32,7 +32,7 @@
     msg.textContent="表单还没设置好，请联系办公室。Form not ready yet — please contact the office.";
     return;
   }
-  var url=f.split("?")[0]+"?prefill_Source=Worker+Form&hide_Source=true";
+  var url=f.split("?")[0]+"?prefill_Source=Supervisor+Form&hide_Source=true&prefill_Status=Submitted&hide_Status=true";
   go.href=url; go.hidden=false;
   location.replace(url);
 })();

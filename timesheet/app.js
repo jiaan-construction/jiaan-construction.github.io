@@ -6,7 +6,7 @@ const C = window.JIAAN_TS_CONFIG;
 const T = C.ops.timesheets, A = C.ops.adjustments;
 const API = "https://api.airtable.com/v0/";
 const TZ = "Asia/Singapore";
-const WORKER_FORM_URL = new URL("form/", location.href).href;   // 工人用的固定网址
+const WORKER_FORM_URL = new URL("form/", location.href).href;   // 主管每日录入的固定网址
 
 const SHIFTS = {
   D:{name:"日班", en:"Day", st:"08:00", et:"20:00"},
@@ -17,7 +17,7 @@ const SHIFTS = {
   SB:{name:"待命", en:"Standby", st:"08:00", et:"17:00"},
 };
 const SHIFT_BY_EN = Object.fromEntries(Object.entries(SHIFTS).map(([k,v])=>[v.en,k]));
-const STATUS = {S:"工人提交", R:"已录入", E:"有工卡", V:"已核验", X:"已退回"};
+const STATUS = {S:"现场申报", R:"已录入", E:"有工卡", V:"已核验", X:"已退回"};
 const STATUS_AT = {S:"Submitted", R:"Recorded", E:"Evidence Attached", V:"Verified", X:"Rejected"};
 const STATUS_FROM_AT = Object.fromEntries(Object.entries(STATUS_AT).map(([k,v])=>[v,k]));
 
@@ -252,7 +252,7 @@ function renderEntry(){
   let h=`<div class="proj-head"><h2>${esc(p?.name||puid)}</h2>
     <span class="meta">${esc(p?.org||"")}${p?.cycle?" · Claim 周期 "+esc(p.cycle):""}</span>
     <span class="meta mono">${date} 周${WD[dow(date)]}${isPH(date)?" · <b style='color:var(--bad)'>公休</b>":dow(date)===0?" · <b style='color:var(--bad)'>周日</b>":""} · Airtable 里 ${existing.length} 条 · ${fmtH(dayH)} h</span></div>`;
-  if(nS) h+=`<div class="note warn" style="margin-bottom:12px">有 ${nS} 条是工人用表单提交的（黄色「工人提交」）。核对后点保存，就会转成办公室记录并补齐编号。</div>`;
+  if(nS) h+=`<div class="note warn" style="margin-bottom:12px">有 ${nS} 条是主管用每日录入表交的「现场申报」（黄色）。这是申报，不是核实：到「核验工卡」里对照工卡 / 签字单后再标记已核验。在这里改动并保存，会转成办公室记录。</div>`;
   if(!cranes.length) h+=`<div class="note warn" style="margin-bottom:12px">Airtable 里这个工地还没有塔吊记录（Operations → 02｜Cranes）。可以用下面「加一行」手动录。</div>`;
   h+=`<div class="cranes">`;
   for(const {c,list} of Object.values(craneRows)){
@@ -415,7 +415,7 @@ function renderCheck(){
   $("c-body").innerHTML=h;
 }
 function selectedRows(){ return allRows().filter(r=>S.sel.has(r._id)); }
-function completeFields(r){ // 工人表单提交的记录：核验时补齐编号和稳定键
+function completeFields(r){ // 主管表单提交的现场申报：核验时补齐编号和稳定键
   const f={};
   if(!r.uid && r.date && r.project) f[T.uid]=makeUid(r.project, slotKey(r.date,r.crane||"—",r.shift))+"_"+r._id.slice(-5);
   if(r.project){ f[T.projectUid]=r.project; const p=M.proj(r.project); if(p) f[T.projectLink]=[p.rec]; }
@@ -741,7 +741,7 @@ function wire(){
   $("s-body").addEventListener("input",onCfgInput); $("s-body").addEventListener("change",onCfgInput);
   $("btn-refresh").addEventListener("click",async()=>{ if(Object.keys(S.dirty).length){ toast("还有未保存的改动，先保存或放弃再刷新"); return; } S.months.clear(); S.rows={}; S.adjLoaded=""; if(await connect()) ensureData(true); });
   $("btn-settings").addEventListener("click",()=>showConnect(""));
-  $("btn-form").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(WORKER_FORM_URL); toast("已复制："+WORKER_FORM_URL+"  发到 WhatsApp 群就行", 6000); }catch{ toast(WORKER_FORM_URL, 12000); } });
+  $("btn-form").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(WORKER_FORM_URL); toast("已复制每日录入网址："+WORKER_FORM_URL, 6000); }catch{ toast(WORKER_FORM_URL, 12000); } });
   $("set-cancel").addEventListener("click",hideConnect);
   $("set-clear").addEventListener("click",()=>{ LS.del("token"); SS.del("token"); S.token=null; S.ready=false; showConnect("已清除这台设备上的令牌。"); });
   $("set-save").addEventListener("click",async()=>{
