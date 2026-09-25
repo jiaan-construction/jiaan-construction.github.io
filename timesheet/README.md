@@ -2,6 +2,8 @@
 
 **网址：https://jiaan-construction.github.io/timesheet/**（办公室和班组长用，不要发给工人）
 
+**工人填工时网址：https://jiaan-construction.github.io/timesheet/form/**（固定不变，发到 WhatsApp 群；会自动跳到 Airtable 表单并标记 Source = Worker Form）。表单链接写在 `config.js` 的 `workerForm`。
+
 塔吊司机工时的录入、核验和 Claim 计算。数据全部在 Airtable，这个页面本身不存任何数据。
 
 ## 数据在哪

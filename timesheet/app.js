@@ -6,6 +6,7 @@ const C = window.JIAAN_TS_CONFIG;
 const T = C.ops.timesheets, A = C.ops.adjustments;
 const API = "https://api.airtable.com/v0/";
 const TZ = "Asia/Singapore";
+const WORKER_FORM_URL = new URL("form/", location.href).href;   // 工人用的固定网址
 
 const SHIFTS = {
   D:{name:"日班", en:"Day", st:"08:00", et:"20:00"},
@@ -22,7 +23,7 @@ const STATUS_FROM_AT = Object.fromEntries(Object.entries(STATUS_AT).map(([k,v])=
 
 // ---------- state ----------
 const S = {
-  token:null, userName:"", formUrl:"",
+  token:null, userName:"",
   projects:[], cranes:[], workers:[], rates:[],
   rows:{},            // recId -> row
   months:new Set(),   // months loaded (YYYY-MM)
@@ -689,7 +690,7 @@ function fillSelectors(){
 function showConnect(msg, isErr){
   for(const id of ["v-entry","v-check","v-sum","boot"]) $(id).hidden=true;
   $("v-connect").hidden=false;
-  $("set-name").value=S.userName; $("set-form").value=S.formUrl;
+  $("set-name").value=S.userName;
   $("set-cancel").hidden=!S.ready; $("set-clear").hidden=!S.token;
   $("set-msg").innerHTML=msg?`<div class="note ${isErr?"err":""}">${esc(msg)}</div>`:"";
 }
@@ -700,7 +701,7 @@ async function connect(){
   catch(e){ S.ready=false; showConnect(explain(e), true); return false; }
   $("boot").hidden=true; S.ready=true;
   $("who").innerHTML=S.userName?`<span>${esc(S.userName)}</span>`:"";
-  $("btn-form").hidden=!S.formUrl;
+  $("btn-form").hidden=!C.workerForm;
   fillSelectors(); hideConnect();
   return true;
 }
@@ -740,14 +741,14 @@ function wire(){
   $("s-body").addEventListener("input",onCfgInput); $("s-body").addEventListener("change",onCfgInput);
   $("btn-refresh").addEventListener("click",async()=>{ if(Object.keys(S.dirty).length){ toast("还有未保存的改动，先保存或放弃再刷新"); return; } S.months.clear(); S.rows={}; S.adjLoaded=""; if(await connect()) ensureData(true); });
   $("btn-settings").addEventListener("click",()=>showConnect(""));
-  $("btn-form").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(S.formUrl); toast("表单链接已复制，发到 WhatsApp 群就行"); }catch{ toast(S.formUrl, 12000); } });
+  $("btn-form").addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(WORKER_FORM_URL); toast("已复制："+WORKER_FORM_URL+"  发到 WhatsApp 群就行", 6000); }catch{ toast(WORKER_FORM_URL, 12000); } });
   $("set-cancel").addEventListener("click",hideConnect);
   $("set-clear").addEventListener("click",()=>{ LS.del("token"); SS.del("token"); S.token=null; S.ready=false; showConnect("已清除这台设备上的令牌。"); });
   $("set-save").addEventListener("click",async()=>{
     const tok=$("set-token").value.trim() || S.token;
     if(!tok || !/^pat\w+\.\w+$/.test(tok)){ showConnect("令牌格式不对：应该是 pat 开头、中间有一个点的一长串。", true); return; }
-    S.token=tok; S.userName=$("set-name").value.trim(); S.formUrl=$("set-form").value.trim();
-    LS.set("name",S.userName); LS.set("form",S.formUrl);
+    S.token=tok; S.userName=$("set-name").value.trim();
+    LS.set("name",S.userName);
     if($("set-remember").checked){ LS.set("token",tok); SS.del("token"); } else { SS.set("token",tok); LS.del("token"); }
     $("set-token").value="";
     if(await connect()) ensureData(true);
@@ -758,7 +759,7 @@ async function start(){
   const today=todaySG();
   $("e-date").value=today; $("c-month").value=monthOf(today); $("s-month").value=monthOf(today);
   S.tab=LS.get("tab","entry"); if(!["entry","check","sum"].includes(S.tab)) S.tab="entry";
-  S.userName=LS.get("name",""); S.formUrl=LS.get("form","");
+  S.userName=LS.get("name","");
   S.token=LS.get("token",null)||SS.get("token");
   wire();
   if(!S.token){ showConnect(""); return; }

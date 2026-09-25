@@ -25,6 +25,10 @@ window.JIAAN_TS_CONFIG = {
     base: "app2qjzFpdEr4JZYu",
     rates: { table: "tbl76MVm6pC77T1wg", project: "fld3nwrcjsTzN8RXN", month: "fld6oH9gPJb6reqlz", status: "fldlFQ3di9itvLWkD", rows: "fld1uoEdwSZ7UMNJG", otSummary: "fld43NhlACpFLGR2q" },
   },
+  // 工人填报表单：Airtable 表单的分享链接（shr 开头那段），原样贴进来即可。
+  // 工人用的固定网址是 https://jiaan-construction.github.io/timesheet/form/ ，会自动跳到这里，
+  // 并自动带上 Source = Worker Form（隐藏，工人看不到）。
+  workerForm: "",
   // 新加坡公共假日（来源：总包 Claim 计算表 → Holidays，权威源 MOM）。count=false 的日期不判公休。
   // 每年 MOM 公布后在这里加一行即可。
   holidays: [
