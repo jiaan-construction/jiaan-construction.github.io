@@ -216,7 +216,7 @@ a{color:var(--steel)}
       <button class="tab" role="tab" id="tab-entry" aria-selected="true" data-tab="entry">按天录入</button>
       <button class="tab" role="tab" id="tab-check" aria-selected="false" data-tab="check">核验工卡<span class="count" id="cnt-check">0</span></button>
       <button class="tab" role="tab" id="tab-sum" aria-selected="false" data-tab="sum">Claim 计算</button>
-      <span class="spacer"></span><button class="btn sm ghost" id="btn-form" hidden>复制工人表单链接</button>
+      <span class="spacer"></span><button class="btn sm ghost" id="btn-form" hidden>复制工人填工时网址</button>
     </nav>
   </header>
 
@@ -229,7 +229,6 @@ a{color:var(--steel)}
       <p>工时台直接读写你的 Airtable（03 Operations、04 Workforce、02 Commercial）。第一次在这台设备上使用，需要贴一个 <b>Airtable 个人访问令牌</b>。令牌只存在这台设备的浏览器里，不会上传到 GitHub 或任何其他地方。</p>
       <label class="field"><span>访问令牌（pat 开头）</span><input type="password" id="set-token" autocomplete="off" placeholder="patXXXXXXXX.XXXXXXXX"></label>
       <label class="field"><span>核验人名字（写进 Verified By）</span><input type="text" id="set-name" placeholder="例如 David"></label>
-      <label class="field"><span>工人填报表单链接（可选，Airtable 表单的分享链接）</span><input type="text" id="set-form" placeholder="https://airtable.com/app.../pag.../form"></label>
       <label class="chk"><input type="checkbox" id="set-remember" checked> 在这台设备上记住令牌（公共电脑请取消）</label>
       <div class="actions"><button class="btn primary" id="set-save">保存并连接</button><button class="btn ghost" id="set-cancel" hidden>取消</button><span class="spacer"></span><button class="btn danger" id="set-clear" hidden>清除这台设备上的令牌</button></div>
       <div id="set-msg"></div>
